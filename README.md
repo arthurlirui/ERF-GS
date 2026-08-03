@@ -37,6 +37,8 @@ pip install -r requirements.txt
 ### Dataset
 TODO
 
+Change `dataset_paths` in `data/multiview.py` to the actual path of downloaded datasets.
+
 To recreate the **-mb**, **-ts** and **-dv** version of Neu3D and Nvidia-long, run the following command:
 ```python
 python scripts/process_motion_blur.py \

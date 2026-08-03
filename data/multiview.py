@@ -32,8 +32,8 @@ from utils.graphics_utils import (
 )
 
 dataset_paths = {
-    "nvidia-long": "YOUR_PATH_TO_DATASET/nvidia-long",
-    "neu3d": "YOUR_PATH_TO_DATASET/neu3d",
+    "nvidia-long": "YOUR_PATH_TO_DATASET/Nvidia",
+    "neu3d": "YOUR_PATH_TO_DATASET/Neu3D",
 }
 
 
