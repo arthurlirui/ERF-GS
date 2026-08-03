@@ -1,0 +1,13 @@
+base_config: default.yaml
+
+data:
+  task: flame_steak
+  time_subsample: 16
+
+optimize:
+  lambda_event: 0.1
+  lambda_preg: 0.01
+  lambda_creg: 0.01
+
+ev_densify:
+  apply_ev_densify: True

@@ -1,0 +1,8 @@
+base_config: default.yaml
+
+data:
+  task: Skating
+  time_subsample: 6
+
+ev_densify:
+  apply_ev_densify: True

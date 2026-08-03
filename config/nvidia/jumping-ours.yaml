@@ -1,0 +1,13 @@
+base_config: default.yaml
+
+data:
+  task: Jumping
+  time_subsample: 4
+
+ev_densify:
+  apply_ev_densify: True
+
+optimize:
+  lambda_event: 0.1
+  lambda_preg: 0.01
+  lambda_creg: 0.01

@@ -1,0 +1,4 @@
+base_config: default.yaml
+
+data:
+  task: flame_steak

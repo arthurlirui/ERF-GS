@@ -1,0 +1,53 @@
+base_config: ../default.yaml
+data_name: neu3d
+
+model:
+  name: 4dgs
+  sh_degree: 3
+  percent_dense: 0.01
+  deformation:
+    net_width: 128
+    defor_depth: 0
+    posebase_pe: 10
+    scale_rotation_pe: 2
+    opacity_pe: 2
+    no_dx: False
+    no_ds: False
+    no_dr: False
+    no_do: False
+    no_dshs: False
+    no_grid: False
+    bounds: 1.6
+    kplanes_config:
+      grid_dimensions: 2
+      input_coordinate_dim: 4
+      output_coordinate_dim: 16
+      resolution: [64, 64, 64, 150]
+    multires: [1, 2]
+    empty_voxel: False
+    grid_pe: 0
+    static_mlp: False
+
+optimize:
+  coarse_iterations: 3000
+  fine_iterations: 14000
+  plane_tv_weight: 0.0002
+  time_smoothness_weight: 0.001
+  l1_time_planes: 0.0001
+  lambda_dssim: 0
+
+densify:
+  opacity_reset_interval: 60000
+  densify_until_iter: 10000
+
+ev_densify:  
+  apply_ev_densify: False
+  ev_thr: 1
+  knn: 3
+  num_depths: 200
+  downsample_scale: 2
+  float_thr: 10
+  num_candidates: 1000
+  densify_from_iter: 500
+  densify_until_iter: 10000
+  densify_interval: 200

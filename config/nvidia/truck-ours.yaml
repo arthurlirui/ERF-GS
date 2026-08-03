@@ -1,0 +1,8 @@
+base_config: default.yaml
+
+data:
+  task: Truck
+  time_subsample: 8
+
+ev_densify:
+  apply_ev_densify: True
