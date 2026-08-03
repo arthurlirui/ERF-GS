@@ -3,9 +3,9 @@
 
 > [**ERF-GS: Reconstructing Fast Motion from Disjoint Event-RGB Viewpoints**](),            
 > [Xiaoyang Bai](https://andrewbxy.github.io/)\*, [Zhenyang Li](https://lagrangeli.github.io/)\*, [Weiwei Xu](http://www.cad.zju.edu.cn/home/weiweixu/weiweixu_en.htm), [Edmund Y. Lam](https://eee.hku.hk/~elam/), [Yifan Peng](https://www.eee.hku.hk/~evanpeng/)  
-> **CVMJ**
+> **in production for CVMJ**
 
-**Official code repository of "ERF-GS: Reconstructing Fast Motion from Disjoint Event-RGB Viewpoints" (CVMJ).**
+**Official code repository of "ERF-GS: Reconstructing Fast Motion from Disjoint Event-RGB Viewpoints" (in production for CVMJ).**
 
 ## Pipeline
 <div align="center">
@@ -34,10 +34,18 @@ pip install -e submodules/simple-knn
 pip install -r requirements.txt
 ```
 
-### Dateset
+### Dataset
 TODO
 
-### Training
+To recreate the **-mb**, **-ts** and **-dv** version of Neu3D and Nvidia-long, run the following command:
+```python
+python scripts/process_motion_blur.py \
+  --scene_root "${path}" \
+  --subsample "${subsample_factor}" \
+  --scene_name "${scene_name}"
+```
+
+## Training and Evaluation
 After preparing corresponding data, you can train ERF-GS by running
 ```python
 python train.py \

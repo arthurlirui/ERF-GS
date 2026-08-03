@@ -1,8 +1,6 @@
-from calendar import c
-import os
-import cv2
-import glob
 import argparse
+import numpy as np
+import os
 from pathlib import Path
 from natsort import natsorted
 
@@ -11,13 +9,6 @@ import torchvision.transforms as tf
 from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-from PIL import Image
-
-import numpy as np
-
-import subprocess
-
-from torch import native_batch_norm
 from loguru import logger as guru
 from tqdm import tqdm
 
@@ -25,13 +16,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--scene_root",
-        type=str,
-        default="/mnt/ssd2/zhenyang/datasets/nvidia_ds/",
+        type=str
     )
     parser.add_argument(
         "--scene_name",
-        type=str,
-        default="Balloon1",
+        type=str
     )
     parser.add_argument(
         "--affix",
@@ -52,7 +41,7 @@ if __name__ == "__main__":
         guru.info(f"process: {scene_name=}")
         scene_dir = os.path.join(root_dir, scene_name)
 
-        target_dir = os.path.join(scene_dir, 'ts{}-new'.format(args.subsample))
+        target_dir = os.path.join(scene_dir, 'ts{}'.format(args.subsample))
         os.makedirs(target_dir, exist_ok=True)
 
         cams_dir = Path(scene_dir)
