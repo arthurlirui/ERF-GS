@@ -35,9 +35,34 @@ pip install -r requirements.txt
 ```
 
 ### Dataset
-TODO
+We have uploaded our parsed [Neu3D](https://huggingface.co/datasets/andrewbxy/ERFGS-Neu3D) and [Nvidia](https://huggingface.co/datasets/andrewbxy/ERFGS-Nvidia) datasets, as well as the corresponding simulated events, to Huggingface. You should change `dataset_paths` in `data/multiview.py` to the actual path of downloaded datasets before using them.
 
-Change `dataset_paths` in `data/multiview.py` to the actual path of downloaded datasets.
+The downloaded datasets should have the following structure:
+```
+Neu3D
+|--coffee_martini
+    |-- cam00
+    |-- cam01
+    |-- cam02
+    |-- ...
+    |-- events
+    |-- colmap/sparse/0 (or /sparse_ for Nvidia)
+      |-- cameras.bin
+      |-- images.bin
+      |-- points3D.bin
+    |-- dynamic_masks
+    |    |-- cam00
+    |    |-- cam01
+    |    |-- cam02
+    |    |-- ...
+    |-- points3D_multipleview.ply
+    |-- poses_bounds_multipleview.npy
+|
+|--cook_spinach
+|
+|--cut_roasted_beef
+|-- ...
+```
 
 To recreate the **-mb**, **-ts** and **-dv** version of Neu3D and Nvidia-long, run the following command:
 ```python
@@ -47,6 +72,8 @@ python scripts/process_motion_blur.py \
   --scene_name "${scene_name}"
 ```
 
+When parsing your custom dataset, remember to store the event stream corresponding to each RGB frame in a separate `.h5` file (named `cam${cam_idx}_${img_idx}.h5` under `events`) so that they can be processed by the codebase into more efficient (but more memory expensive) `.bin` format for train-time loading.
+
 ## Training and Evaluation
 After preparing corresponding data, you can train ERF-GS by running
 ```python
@@ -54,7 +81,7 @@ python train.py \
     --expname "${exp_name}" \
     --config_file "${config_name}"
 ```
-Use `config/${dataset_name}/${scene_name}-baseline.yaml` to run the 4DGS baseline, and `config/${dataset_name}/${scene_name}-ours.yaml` to run ERF-GS. All output files will be placed under `./output/${exp_name}`. Optionally, use the argument `--checkpoint_file "${ckpt_path}"` to load from an intermediate checkpoint.
+Use YAML files in `config` marked with **baseline** to run the 4DGS baseline, and those marked with **ours** to run ERF-GS. All output files will be placed under `./output/${exp_name}`. Optionally, use the argument `--checkpoint_file "${ckpt_path}"` to load from an intermediate checkpoint.
 
 ### Evaluation
 You can perform metric evaluation on a trained ERF-GS checkpoint by running: 
