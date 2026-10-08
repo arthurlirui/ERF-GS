@@ -1,0 +1,44 @@
+\section{Cross-Cutting Technical Synthesis}
+\label{sec:crosscutting}
+
+Beyond the per-category narrative, the Event-GS literature converges on a small set of recurring technical dimensions. We extract them here to make the design space explicit.
+
+\subsection{Event-to-Image vs.\ Event-to-Flow Supervision}
+\label{sec:cross:supervision}
+
+Two paradigms dominate event supervision:
+\begin{itemize}
+    \item \textbf{Event-to-image (intensity-domain):} render two frames, compute linlog-luma difference (Eq.~\eqref{eq:linlog}) or EDI integral (Eq.~\eqref{eq:edi}), compare to GT event voxel/integral. Used by E2GS~\cite{deguchi2024e2gs}, EvaGaussians~\cite{yu2025evagaussians}, EBAD-Gaussian~\cite{deng2025ebad}, ERF-GS~\cite{bai2026erfgs}, Dark-EvGS~\cite{wu2025darkevgs}. Mature and simple, but EvFlow-GS~\cite{an2026evflow} identifies four flaws: noise amplification, constant-threshold assumption, low-intensity degradation, and implicit constant-velocity bias.
+    \item \textbf{Event-to-flow (motion-domain):} use the linear event generation model $\Delta I\approx-\nabla I\cdot\mathbf{v}\,\Delta\tau$ to supervise 2D optical flow or Gaussian screen motion, avoiding the intensity-domain altogether. Used by EvFlow-GS~\cite{an2026evflow} (optical flow warp), EF-3DGS~\cite{liao2025ef3dgs} (Contrast Maximization), FastEventDGS~\cite{dai2026fasteventdgs} (event-flow loss). Rising, because it sidesteps the noise and threshold issues.
+\end{itemize}
+The trend is toward flow-domain supervision or hybrid (global integration + local flow, as in FastEventDGS).
+
+\subsection{Continuous-Time Trajectory Parameterization}
+\label{sec:cross:trajectory}
+
+Because event frequencies ($\sim$\,MHz) vastly exceed pose sampling rates (SfM/mocap), supervising only at discrete pose timestamps wastes event information. Three methods independently converge on \emph{continuous-time trajectory} parameterization: cubic B-splines (FastEventDGS~\cite{dai2026fasteventdgs}), B\'ezier SE(3) curves (EvFlow-GS~\cite{an2026evflow}, EBAD-Gaussian~\cite{deng2025ebad}), and continuous-time trajectory with temporally-coupled poses (EvTrajGS~\cite{chen2026evtrajgs}). This is becoming a standard component; any-time event supervision is now a prerequisite for fast-motion reconstruction.
+
+\subsection{Deformation Fields}
+\label{sec:cross:deformation}
+
+Dynamic Event-GS methods inherit deformation backbones from RGB 4DGS: deformation MLPs with HexPlane~\cite{cao2023hexplane} features (ERF-GS~\cite{bai2026erfgs}, Event-Boosted~\cite{xu2025eventboosted}), or similar spatiotemporal grids (FastEventDGS~\cite{dai2026fasteventdgs}). A consistent design choice is to \emph{not} deform opacity and SH color by default (ERF-GS sets \texttt{no\_do=True}, \texttt{no\_no\_dshs=True}), only position/scale/rotation, to reduce under-constraint. Event-Boosted's dynamic-static decomposition is a complementary strategy: skip deformation entirely in static regions. The interplay between deformation capacity and event supervision is still under-explored---only four dynamic Event-GS methods exist as of mid-2026.
+
+\subsection{Physical Priors}
+\label{sec:cross:physics}
+
+Physics constraints appear in two forms. PEGS~\cite{xu2025pegs} uses Newtonian acceleration consistency (second-order temporal smoothness) and Kalman fusion for rigid-body motion. ERF-GS~\cite{bai2026erfgs} encodes a constant-velocity (linear-motion) prior as a soft regularizer between event-interval endpoints. The gap: no method combines deformable (non-rigid) Gaussians with second-order physics priors, which would require differentiating the deformation field twice with respect to time---feasible but unexplored.
+
+\subsection{Forward Blur Modeling}
+\label{sec:cross:forwardblur}
+
+A counter-current to the deblurring paradigm treats blur as a forward phenomenon to be \emph{modeled}, not removed. MotionGS-SLAM~\cite{hu2026motiongs} modulates Gaussian kernels by event-derived motion; EvFlow-GS~\cite{an2026evflow} and EBAD-Gaussian~\cite{deng2025ebad} synthesize blur from multiple sharp frames to construct a blur loss. This reframing---blur as observation, not noise---unifies the deblurring and SLAM strands.
+
+\subsection{Event-Driven Densification}
+\label{sec:cross:densify}
+
+Unique to explicit GS representations, event-driven densification back-projects event pixels to spawn new Gaussians in fast-moving regions. ERF-GS~\cite{bai2026erfgs} is the only method to formalize this with multi-view consistency and motion-warped initialization. This is a capability with no analog in NeRF-based event methods and a likely growth area.
+
+\subsection{Threshold and Sensor Modeling}
+\label{sec:cross:threshold}
+
+The event contrast threshold $C$ is in reality pixel-, time-, and scene-dependent, yet most methods fix it (ERF-GS uses $C=0.2$). Event-Boosted~\cite{xu2025eventboosted} jointly models the threshold with the GS field, and EvFlow-GS~\cite{an2026evflow} replaces the fixed-threshold model entirely. A fully differentiable event-camera physics module---learnable per-pixel threshold, noise, and response---remains open (see \S\ref{sec:discussion}).

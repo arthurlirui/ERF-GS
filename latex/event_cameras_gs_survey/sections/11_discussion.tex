@@ -1,0 +1,34 @@
+\section{Discussion and Open Problems}
+\label{sec:discussion}
+
+The Event-GS literature has matured rapidly but several gaps remain conspicuously open. We identify five, ordered roughly by modality-specificity (most event-unique first).
+
+\subsection{Occlusion Handling via Event Appearance/Disappearance Boundaries}
+\label{sec:disc:occlusion}
+
+No Event-GS method explicitly handles occlusion. Existing dynamic methods (FastEventDGS~\cite{dai2026fasteventdgs}, ERF-GS~\cite{bai2026erfgs}, Event-Boosted~\cite{xu2025eventboosted}) assume Gaussians remain visible; occluded Gaussians drift or are mis-pruned for lack of supervision. Events offer a modality-unique signal: a pixel stops triggering events when its object is occluded and bursts when it reappears. The ``appearance/disappearance boundaries'' of event activity could online-detect occlusion intervals, during which occluded Gaussians are frozen (no deformation, no densification), resuming optimization on reappearance. RGB cannot distinguish ``object disappeared'' from ``object occluded''; events can, because a statically occluded object triggers no events. This is the most event-unique open direction.
+
+\subsection{Static-Prior Bootstrapping for 4DGS}
+\label{sec:disc:bootstrap}
+
+All dynamic Event-GS methods cold-start from sparse COLMAP point clouds, learning appearance, motion, and pose simultaneously. None exploits the now-availability of high-quality static 3DGS reconstructions as a prior. A ``bootstrap'' paradigm---initialize \texttt{GaussianModel} from a converged static 3DGS \texttt{.ply} (xyz+SH+scale+opacity+rotation), zero-initialize the deformation field to identity, and let events supervise only the motion increment---would lock appearance/geometry and free optimization capacity for motion. This directly addresses the cold-start failure mode where fast-moving objects ``disappear'' because static-region Gaussians outcompete them for gradient.
+
+\subsection{Per-Event Point-Process Losses}
+\label{sec:disc:pointprocess}
+
+Every Event-GS method \emph{aggregates} events into voxels, frames, or integrals, discarding microsecond-level time resolution. Worse, GT aggregation counts total windowed activity while prediction examines only endpoint net change, systematically mismatching oscillatory motion. The event stream is a marked temporal point process: each $(x,y,t,p)$ is a physical constraint ``log-luma crossed $\pm C$ at time $t$.'' A per-event loss---rendering at exact event timestamps and enforcing the threshold-crossing constraint---would be the most physically faithful supervision form. No Event-GS method implements this; it requires preserving event timestamps (current preprocessing discards them), per-event sampling, and a differentiable point-process likelihood. The academic novelty is high; the engineering cost is moderate.
+
+\subsection{Differentiable Event-Camera Physics Simulator}
+\label{sec:disc:sim}
+
+The linlog + fixed-threshold + STE pipeline (ERF-GS~\cite{bai2026erfgs}) is a hard-quantization approximation with poor gradient fidelity. GS2E~\cite{li2025gs2e} uses ESIM for simulation but it is not differentiable or jointly trained. A fully differentiable event-physics module---sigmoid-soft threshold crossing, learnable per-pixel threshold/bias/noise, jointly trained with 3DGS---would let gradients flow through the true event-generation physics rather than a straight-through surrogate. This is a general-purpose enhancement stackable onto any of the above.
+
+\subsection{Physics-Constrained Deformable Event-GS}
+\label{sec:disc:physics}
+
+PEGS~\cite{xu2025pegs} demonstrates physics priors for rigid SE(3) motion but does not deform Gaussians; ERF-GS/FastEventDGS deform Gaussians but lack physics. Combining a deformable event-GS with (i) acceleration-consistency regularization (second derivative of the deformation field w.r.t.\ time, feasible since deformation fields are continuously differentiable) and (ii) local-rigidity priors (KNN-neighbor relative-displacement L2) would constrain the under-determined motion field. The challenge is weighting physics vs.\ event loss; the benefit is temporal smoothness that events alone cannot enforce.
+
+\subsection{Evaluation and Benchmarks}
+\label{sec:disc:benchmarks}
+
+The field lacks a unified benchmark. Each method paper contributes its own dataset (EvaGaussians, Dark-EvGS, PEGS, Event-Boosted, AsyncEvGS) with inconsistent metrics, masks, and splits. A community benchmark---with standardized dynamic/static region metrics (cf.\ ERF-GS's Dynamic-* / Static-* metrics using dynamic masks), shared test scenes across deblurring/4D/SLAM, and a common event-simulation protocol---would accelerate progress. GS2E's 1150+ scenes are a starting point for synthetic evaluation; real-data standardization remains open.

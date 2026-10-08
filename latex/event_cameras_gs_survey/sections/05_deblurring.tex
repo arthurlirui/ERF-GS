@@ -1,0 +1,65 @@
+\section{Motion Deblurring}
+\label{sec:deblurring}
+
+Motion deblurring is the most populated Event-GS category. The setup is canonical: a moving camera captures blurry RGB frames during prolonged exposure, while a co-located event camera records blur-free log-luminance changes. The Event Double Integral (EDI)~\cite{pan2019edi} prior relates a blurry image $B$ to a sequence of sharp images $\{I_k\}$ and the event stream:
+\begin{equation}
+    B = \frac{1}{N}\sum_{k=1}^{N} I_k, \quad I_k = I_0 \cdot \exp\!\Big(\int_0^{t_k} e(\tau)\,d\tau\Big).
+    \label{eq:edi}
+\end{equation}
+Almost every method in this section is a variant of Eq.~\eqref{eq:edi} grafted onto differentiable GS rendering, differing in how the event prior is parameterized (analytic vs.\ learnable), whether poses are estimated, and what auxiliary priors (diffusion, optical flow) are added.
+
+\subsection{E2GS (ICIP 2024)}
+\label{sec:deblur:e2gs}
+
+E2GS~\cite{deguchi2024e2gs} is the first work to incorporate event data into Gaussian Splatting. It combines blurry images with events for deblurring NVS, using the EDI model to split the exposure into $N$ event bins and estimate intermediate sharp frames. It achieves 140\,FPS rendering and is $60\times$ faster to train and $3500\times$ faster to render than the prior event-NeRF baseline E$^2$NeRF.
+
+\textbf{Core point:} establish the event+GS deblurring paradigm and the EDI-bin supervision form.
+
+\subsection{EvaGaussians (ICCV 2025)}
+\label{sec:deblur:evagaussians}
+
+EvaGaussians~\cite{yu2025evagaussians} integrates event streams into both the \emph{initialization} and \emph{optimization} of 3DGS. Events help construct a sharper initial point cloud and provide continuous inter-frame supervision during optimization. It contributes two new RGB+event+pose datasets and demonstrates improved fidelity and training/inference efficiency over EDI-only baselines.
+
+\subsection{DiET-GS (CVPR 2025)}
+\label{sec:deblur:dietgs}
+
+DiET-GS~\cite{lee2025dietgs} extends the EDI prior in two directions. First, it models EDI in the \emph{brightness domain} via a learnable camera response function, rather than treating RGB channels as brightness directly---this better adapts to real sensor non-linearities and recovers finer details. Second, it injects a \emph{diffusion prior} via Renoised Score Distillation (RSD) in a two-stage pipeline: stage~1 (DiET-GS) jointly uses real events and diffusion; stage~2 (DiET-GS++) adds learnable latent residuals per Gaussian and optimizes with diffusion alone to sharpen edges.
+
+\textbf{Core point:} generative priors (diffusion) complement event priors; the two-stage schedule prevents the diffusion prior from being diluted by real-data loss.
+
+\subsection{EBAD-Gaussian (arXiv 2025)}
+\label{sec:deblur:ebad}
+
+EBAD-Gaussian~\cite{deng2025ebad} reconstructs sharp 3D Gaussians from severely blurred images and event streams via an event-driven Bundle Adjustment. It synthesizes multiple sharp intermediate frames within the exposure to construct a blur loss, supervises arbitrary-time brightness change via events, and constrains intermediate frames with the EDI prior. It jointly learns Gaussian parameters and recovers the intra-exposure camera trajectory.
+
+\subsection{EvFlow-GS (ICME 2026)}
+\label{sec:deblur:evflowgs}
+
+EvFlow-GS~\cite{an2026evflow} is notable for explicitly \emph{critiquing} the linlog+fixed-threshold event-generation model on four grounds: noise amplification, constant-threshold assumption, low-intensity-region degradation, and implicit constant-velocity assumption. It replaces it with an end-to-end \emph{learnable double integral (LDI)} supervised by optical flow: events are warped by optical flow to align motion trajectories, yielding sharp supervision. Camera motion is modeled with a 9-control-point B\'ezier SE(3) trajectory.
+
+\textbf{Core point:} a methodological inflection---the field begins to question the linlog+threshold approximation and move toward learnable, flow-based, or physics-based event models.
+
+\subsection{JADE-GS (arXiv 2026)}
+\label{sec:deblur:jadegs}
+
+JADE-GS~\cite{fu2026jadegs} treats deblurring as \emph{evidence allocation}: two families of priors---the analytic EDI inversion and a learned frame+event restoration network---are viewed as complementary evidence sources. A lightweight Spatial Prior Router performs pixel-level allocation to fuse them into an auxiliary supervision target. The router trains without clean reference frames and is removed after optimization. JADE-GS leads LPIPS and CLIP-IQA on both synthetic and real benchmarks while training in $\sim$1\,h on a consumer GPU.
+
+\subsection{E2D-GS (ESWA 2025)}
+\label{sec:deblur:e2dgs}
+
+E2D-GS~\cite{lin2025e2dgs} physically models motion-blur formation from event streams and optimizes the discrepancy between synthesized and observed blurry images while recovering the camera trajectory. A differential-consistency module denoises events and regularizes Gaussian parameters for robustness in real-world conditions.
+
+\subsection{EaDeblur-GS and Ev3DGS (2024)}
+\label{sec:deblur:early}
+
+EaDeblur-GS~\cite{weng2024eadeblur} integrates event data into 3DGS for real-time sharp reconstruction from blurred inputs, achieving comparable quality to state-of-the-art with real-time rendering. Ev3DGS~\cite{huang2024ev3dgs} is a concurrent APSIPA'24 framework combining event and RGB cameras with 3DGS, improving rendering performance and reducing training time.
+
+\subsection{DeblurSplat (arXiv 2025) and AsyncEvGS (arXiv 2026)}
+\label{sec:deblur:free}
+
+DeblurSplat~\cite{li2025deblursplat} is the first SfM-free deblurring event-GS: it removes the Structure-from-Motion prerequisite, achieving high-fidelity novel views with significant rendering efficiency. AsyncEvGS~\cite{dai2026asyncevgs} introduces a flexible, high-resolution \emph{asynchronous} RGB-Event dual-camera system and contributes the AsyncEv-Deblur dataset captured with this hardware, addressing the synchronization bottleneck of rigidly coupled RGB-event rigs.
+
+\subsection{BAD-Gaussians (ECCV 2024, non-event baseline)}
+\label{sec:deblur:bad}
+
+BAD-Gaussians~\cite{zhao2024badgaussians} is a non-event bundle-adjusted deblur 3DGS that handles severe motion blur with inaccurate poses. We include it as the canonical \emph{non-event} baseline against which the event-assisted methods above are benchmarked; it establishes the explicit-Gaussian deblurring formulation that event priors later augment.

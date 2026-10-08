@@ -1,0 +1,66 @@
+\section{Dynamic and 4D Reconstruction}
+\label{sec:dynamic}
+
+Dynamic-scene Event-GS is the most methodologically active category. The common substrate is a Deformable 3DGS (deformation MLP + HexPlane grid, or 4D primitives) that predicts per-Gaussian deltas at query time $t$. Events provide the high-temporal-resolution motion supervision that RGB cannot, but raise three challenges: (i) how to query arbitrary timestamps given sparse poses; (ii) how to constrain photometry without absolute intensity; (iii) how to correct depth under monocular sparse views.
+
+\subsection{Event-Boosted Deformable 3D Gaussians (ICCV 2025)}
+\label{sec:dynamic:boosted}
+
+Event-Boosted~\cite{xu2025eventboosted} is the first event-camera + deformable-3DGS combination for dynamic scenes. It makes two contributions. (1) \emph{GS-Threshold Joint Modeling (GTJM)}: observing that event threshold modeling is critical to reconstruction quality, it jointly optimizes the Gaussian field and the event threshold, with each informing the other---eliminating the ``purple haze'' artifact caused by a misspecified fixed threshold. (2) \emph{Dynamic-Static Decomposition (DSD)}: dynamic areas are identified by the inability of static Gaussians to represent motion, then a buffer-based soft decomposition separates dynamic and static Gaussians, accelerating rendering and focusing deformation capacity on dynamic regions. It contributes the first event-inclusive 4D benchmark with synthetic and real-world dynamic scenes.
+
+\textbf{Core point:} the event threshold is a learnable, jointly-optimized parameter, not a fixed constant---an early step toward differentiable event-camera physics.
+
+\subsection{FastEventDGS (CVPR 2026)}
+\label{sec:dynamic:fast}
+
+FastEventDGS~\cite{dai2026fasteventdgs} is the first method to train Deformable 3DGS for dynamic scenes using \emph{only a single monocular event camera}, with no auxiliary RGB sensor. Its four design pillars are:
+\begin{itemize}
+    \item \textbf{Continuous trajectory parameterization:} cubic B-splines fit sparse poses into a continuous trajectory, enabling event supervision at any timestamp $\tau$---essential because event frequency vastly exceeds pose sampling rate.
+    \item \textbf{Dual event generation model:} an Event Single Integral (ESI) loss provides global photometric consistency, while a linear event-flow loss $\Delta I(\mathbf{x})\approx-\nabla I\cdot\mathbf{v}\,\Delta\tau$ provides local geometric constraints via camera flow + Gaussian flow.
+    \item \textbf{Local patch motion loss:} projects sampled Gaussian centers to the image plane and enforces that consecutive event integrals on patches around them are consistent, pinning Gaussian trajectories to event edges and suppressing background jitter.
+    \item \textbf{Refinement stage:} uses the VGGT feed-forward model as a depth expert with a Scale-Invariant Logarithmic (SiLog) loss, plus non-event-region and spatial-smoothness regularizers.
+\end{itemize}
+It improves PSNR from $\sim$16\,dB to 22--24\,dB on synthetic and real fast-motion datasets.
+
+\textbf{Core point:} events should be treated as explicit supervision for the motion field, not merely brightness differences; the combination of global integration + local flow + motion-edge pinning resolves the monocular under-constraint.
+
+\subsection{ERF-GS (CVMJ 2026)}
+\label{sec:dynamic:erfgs}
+
+ERF-GS~\cite{bai2026erfgs} (the focus of this project's codebase) reconstructs fast motion from \emph{disjoint} multi-view Event-RGB viewpoints: some cameras supply only RGB, others only events, never both. Its three contributions are:
+\begin{itemize}
+    \item \textbf{linlog + STE event loss:} predicted events are the linlog-luma difference between two deformed-frame renders (Eq.~\eqref{eq:linlog}); the loss uses a straight-through estimator (STE) to quantize predictions to integer polarity counts while preserving gradients, normalized by $\max(|e_{gt}|,1)$.
+    \item \textbf{Linear-motion + constant-color regularization:} between event-interval endpoints, the deformed position is required to follow a linear interpolation and the color to remain constant, encoding a constant-velocity prior.
+    \item \textbf{Event-driven densification:} event pixels are back-projected at multiple candidate depths across views, filtered by multi-view consistency, selected by deformation-aware isolation, and initialized via motion-warped KNN. This spawns new Gaussians in fast-moving regions that RGB-gradient densification misses.
+\end{itemize}
+The disjoint-viewpoint setup forces cross-modal fusion and is the paper's defining experimental contribution.
+
+\textbf{Core point:} events drive not only the loss but also the \emph{densification}---a capability unique to explicit GS representations.
+
+\subsection{PEGS (arXiv 2025)}
+\label{sec:dynamic:pegs}
+
+PEGS~\cite{xu2025pegs} brings \emph{physics priors} to event-driven GS for large spatiotemporal-scale rigid-body motion. It layers three supervisions: (i) acceleration-consistency constraints from Newtonian dynamics, (ii) high-temporal-resolution event-flow guidance, and (iii) Kalman regularization fusing multi-source observations. A motion-aware simulated-annealing strategy schedules the constraints. It contributes the first paired RGB-Event dataset of natural fast rigid-body motion.
+
+\textbf{Core point:} physics priors (acceleration consistency) and event supervision are complementary---events give high-rate positions, physics gives second-order smoothness---and their combination is, to our knowledge, unique to PEGS within the Event-GS family.
+
+\subsection{Comparison of dynamic methods}
+
+\begin{table}[t]
+\centering
+\caption{Comparison of dynamic/4D Event-GS methods.}
+\label{tab:dynamic}
+\small
+\begin{tabular}{@{}p{2.3cm}p{1.1cm}p{1.1cm}p{1.6cm}p{1.0cm}@{}}
+\toprule
+Method & Input & Pose & Event model & Physics \\
+\midrule
+Event-Boosted~\cite{xu2025eventboosted} & E+R & Known & Learnable thresh. & -- \\
+FastEventDGS~\cite{dai2026fasteventdgs} & E & Sparse & ESI+flow & -- \\
+ERF-GS~\cite{bai2026erfgs} & E+R & Known & linlog+STE & Linear \\
+PEGS~\cite{xu2025pegs} & E+R & Known & Event flow & Accel. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:dynamic} shows the diversity: only FastEventDGS is event-only; only PEGS uses physics; only ERF-GS uses event-driven densification; only Event-Boosted jointly models the threshold. This four-way design space---input modality, pose regime, event model, prior type---maps the open frontier of dynamic Event-GS.

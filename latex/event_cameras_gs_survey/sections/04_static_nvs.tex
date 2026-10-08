@@ -1,0 +1,59 @@
+\section{Static Novel-View Synthesis}
+\label{sec:static}
+
+This category covers methods that reconstruct a static 3D Gaussian scene from event-camera input, typically with a fast-moving camera and possibly unknown poses. The central challenge is that events carry no absolute intensity, so photometric supervision must be synthesized indirectly.
+
+\subsection{Event-3DGS (NeurIPS 2024)}
+\label{sec:static:event3dgs}
+
+Event-3DGS~\cite{han2024event3dgs} is the first event-based 3DGS method. It optimizes Gaussian parameters from event streams by rendering images at adjacent timestamps and enforcing consistency between the rendered log-luminance difference and the integral of events in the interval. To stabilize optimization under the sparse, noisy event signal, it introduces a \emph{view-volume consistency loss} that penalizes large spatial derivatives of the rendered event image. It demonstrates superior reconstruction quality over event-NeRF baselines on both simulated and real datasets, while inheriting 3DGS's real-time rendering.
+
+\textbf{Core point:} establish that differentiable GS rasterization can be supervised directly by event integrals, opening the Event-GS paradigm.
+
+\subsection{EvGGS (ICML 2024)}
+\label{sec:static:evggs}
+
+EvGGS~\cite{wang2024evggs} is the first \emph{generalizable} event-GS: rather than per-scene optimization, it reconstructs 3D Gaussians from event input in a single feed-forward pass and generalizes to unseen scenes without retraining. It uses a collaborative learning framework with multiple losses (image, feature, geometry) and an event-to-image regression sub-network that provides pseudo-RGB supervision. A distillation strategy transfers the regression network's knowledge to the GS renderer.
+
+\textbf{Core point:} move Event-GS from per-scene optimization to feed-forward generalization, a direction RGB GS explored later with pixel-splat methods.
+
+\subsection{EV-GS (MVA 2024)}
+\label{sec:static:evgs}
+
+EV-GS~\cite{wu2024evgs} is the first Contrast-Noise-Intensity (CNI)-informed scheme for monocular event-GS. It explicitly models the CNI relationship of the event sensor to improve the fidelity of the predicted event image from rendered Gaussians, enabling efficient novel-view synthesis from a single moving event camera.
+
+\subsection{EventSplat (CVPR 2025)}
+\label{sec:static:eventsplat}
+
+EventSplat~\cite{yura2025eventsplat} targets static-scene NVS from a fast-moving event camera. Two design choices distinguish it: (i) initialization via an event-to-video (E2VID) model produces a denser, more accurate initial point cloud than naive event-voxel back-projection; (ii) spline interpolation across the event-camera trajectory yields high-quality per-event poses, mitigating the pose-aliasing that plagues fast-motion event capture. It achieves real-time rendering and outperforms event-NeRF by an order of magnitude in speed.
+
+\textbf{Core point:} initialization quality and pose continuity dominate final fidelity; E2VID + splines are simple, effective priors.
+
+\subsection{IncEventGS (CVPR 2025)}
+\label{sec:static:inceventgs}
+
+IncEventGS~\cite{huang2025inceventgs} is the first \emph{pose-free} event-GS from a single event camera. It runs an incremental tracking-and-mapping loop: events track camera motion via differentiable rendering of the current Gaussian map, while mapping updates Gaussians with the tracked poses. It outperforms NeRF-based pose-free event methods even without ground-truth poses, at the cost of SLAM-style computational overhead.
+
+\subsection{EF-3DGS (NeurIPS 2025, Spotlight)}
+\label{sec:static:ef3dgs}
+
+EF-3DGS~\cite{liao2025ef3dgs} introduces the event camera to \emph{free-trajectory} 3DGS---reconstruction from a casually captured video with no precise poses. It combines three components: (1) an Event Generation Model that fuses events and frames for continuous inter-frame supervision; (2) Contrast Maximization (CMax) for joint pose calibration and gradient-domain 3DGS constraints; (3) photometric Bundle Adjustment with a fixed-GS separation of structure and color optimization. It reports $+3$\,dB PSNR and $-40\%$ ATE on high-speed scenes versus pose-free RGB baselines.
+
+\textbf{Core point:} events are a natural regularizer for pose-free reconstruction; CMax gives a calibration signal that RGB-only SfM lacks under fast motion.
+
+\subsection{GS-EVT (ICRA 2025)}
+\label{sec:static:gsevt}
+
+GS-EVT~\cite{liu2025gsevt} is a cross-modal tracking method: a 3DGS map is built from RGB frames, then an event camera tracks against it. It renders local differential images from the GS map using a first-order motion prior and reference poses, then matches them to integrated event maps via coarse-to-fine optimization. This decouples map-building (RGB, dense) from tracking (events, robust to fast motion).
+
+\subsection{EvTrajGS (arXiv 2026)}
+\label{sec:static:evtrajgs}
+
+EvTrajGS~\cite{chen2026evtrajgs} addresses the efficiency--fidelity trade-off of pose-free event-GS. It parameterizes camera motion as a continuous-time trajectory initialized from coarse pose priors, then aggregates adjacent trajectory states into a \emph{temporally coupled pose} that promotes consistent joint pose--scene updates---avoiding the expensive incremental SLAM loop of IncEventGS. A loss-reweighted event sampling strategy emphasizes under-reconstructed temporal intervals. It achieves $+3.8$\,dB PSNR, $+0.1$ SSIM, and $>40\%$ lower ATE while running $7\times$ faster than IncEventGS.
+
+\textbf{Core point:} continuous-time trajectory parameterization replaces SLAM-style incremental tracking with a unified joint optimization, a recurring design in later work.
+
+\subsection{E2EGS (arXiv 2026)}
+\label{sec:static:e2egs}
+
+E2EGS~\cite{kim2026e2egs} is a pose-free framework operating solely on event streams. Its name reflects the use of event edges as the primary geometric cue: it aligns rendered edge maps to event-edge observations for joint pose--scene optimization, achieving strong reconstruction quality and trajectory accuracy and establishing a fully pose-free event-only paradigm.

@@ -1,0 +1,15 @@
+\section{Datasets and Simulation}
+\label{sec:datasets}
+
+A persistent bottleneck for Event-GS is data scarcity: real event-camera captures with paired RGB, poses, and geometry are expensive and geometrically inconsistent across views. One work directly addresses this.
+
+\subsection{GS2E (NeurIPS 2025)}
+\label{sec:datasets:gs2e}
+
+GS2E~\cite{li2025gs2e} uses 3DGS itself as an event-data generator. It reconstructs real sparse multi-view RGB scenes with 3DGS, then synthesizes events via a physics-informed simulation pipeline with (i) adaptive trajectory interpolation for dense virtual viewpoints and (ii) physically consistent contrast-threshold modeling. This produces a large-scale, multi-view, geometrically consistent event dataset of 1150+ scenes, alleviating the data scarcity that limits event-based method development.
+
+\textbf{Core point:} 3DGS is not only a consumer of event data but a \emph{producer} of it---closing a virtuous loop where GS reconstructions generate the training data for the next generation of event methods.
+
+\subsection{Datasets contributed by method papers}
+
+Beyond GS2E, several method papers contribute datasets that have become de facto benchmarks: EvaGaussians~\cite{yu2025evagaussians} (RGB+event+pose), Dark-EvGS~\cite{wu2025darkevgs} (real dark-light event-radiance), PEGS~\cite{xu2025pegs} (natural fast rigid-body RGB-Event), Event-Boosted~\cite{xu2025eventboosted} (event-inclusive 4D), and AsyncEvGS~\cite{dai2026asyncevgs} (asynchronous RGB-Event). The proliferation of these datasets is itself an indicator of the subfield's maturation.

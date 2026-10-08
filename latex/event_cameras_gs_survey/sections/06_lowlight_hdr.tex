@@ -1,0 +1,18 @@
+\section{Low-Light and HDR Reconstruction}
+\label{sec:lowlight}
+
+Event cameras are uniquely suited to extreme illumination: their HDR ($>120$\,dB) and logarithmic response preserve information in both dark and bright regions where RGB frames saturate or are photon-starved. Two methods pioneeringly exploit this for radiance-field reconstruction.
+
+\subsection{Dark-EvGS (arXiv 2025)}
+\label{sec:lowlight:darkevgs}
+
+Dark-EvGS~\cite{wu2025darkevgs} is the first event-guided dark-light 3DGS bright-frame synthesis. Its core is \emph{triplet-level supervision}: three complementary losses constrain (i) overall scene structure, (ii) fine-grained details, and (iii) sharp rendering. A Color Tone Matching Block ensures color consistency between the synthesized bright frames and the dark RGB observations, addressing the color-shift artifact that naive event-to-image supervision produces. It contributes the first real-world dark-light event-radiance-field dataset.
+
+\textbf{Core point:} in low light, the event signal dominates the RGB signal; the challenge shifts from deblurring to color and detail recovery, requiring explicit tone-matching.
+
+\subsection{EvHDR-GS (AAAI 2026)}
+\label{sec:lowlight:evhdrgs}
+
+EvHDR-GS~\cite{chen2026evhdrgs} reframes HDR video reconstruction as HDR \emph{scene} reconstruction: a 3DGS representation guarantees 3D-consistent temporal brightness. HDR 3D Gaussians simultaneously represent HDR and LDR color, and a learnable HDR-to-LDR tone-mapping is self-supervised by the event stream, removing the dataset bias of fixed tone-mapping operators. The event stream acts as the bridge between HDR radiance and LDR observations.
+
+\textbf{Core point:} the event stream's logarithmic response is a natural differentiable tone-mapping supervisor; coupling it with explicit 3DGS consistency yields temporally stable HDR NVS.

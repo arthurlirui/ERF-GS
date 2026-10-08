@@ -1,0 +1,8 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Event cameras and Gaussian Splatting are a natural pairing: the explicit, real-time, differentiable rasterizer of 3DGS is an ideal substrate for the high-temporal-resolution, motion-rich, but intensity-poor signal of events. In under three years, the Event-GS subfield has grown from a single proof-of-concept~\cite{han2024event3dgs,deguchi2024e2gs} into a multi-track research program spanning static NVS, deblurring, low-light/HDR, dynamic 4D, SLAM, and simulation, with dedicated venues at CVPR, ICCV, ECCV, NeurIPS, and ICML.
+
+This survey organized $24+$ methods into a six-category taxonomy and analyzed the core contribution, event-generation model, and supervision form of each. The cross-cutting synthesis reveals convergence on continuous-time trajectory parameterization, a shift from intensity-domain to flow-domain event supervision, and the emergence of event-driven densification as a GS-unique capability. The most promising open directions---occlusion-aware 4DGS via event boundaries, static-prior bootstrapping, per-event point-process losses, differentiable event-camera physics, and physics-constrained deformation---are precisely those that exploit the event camera's modality-unique properties beyond what RGB can provide.
+
+As event-camera hardware matures and 3DGS becomes the default real-time radiance-field representation, we expect Event-GS to become a standard component of future AR/VR, robotics, and high-speed imaging systems rather than a niche subfield. The next wave of progress will likely come from replacing the linlog+STE approximation with differentiable event physics, and from treating events as explicit motion-field supervision rather than aggregated intensity differences.

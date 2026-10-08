@@ -1,0 +1,58 @@
+\documentclass[10pt,conference]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{Event Cameras Meet Gaussian Splatting: A Survey of Neuromorphic 3D and 4D Reconstruction}
+
+\author{
+\IEEEauthorblockN{Arthur Li Rui}
+\IEEEauthorblockA{\textit{ERF-GS Research Project} \\
+\textit{Independent Survey}\\
+arthurlirui@example.com}
+}
+
+\maketitle
+
+\begin{abstract}
+The intersection of event cameras and Gaussian Splatting (GS) has emerged as one of the most active frontiers in novel-view synthesis and dynamic scene reconstruction. Event cameras asynchronously report per-pixel log-luminance changes with microsecond latency, high dynamic range, and negligible motion blur, complementing the limitations of frame-based RGB sensors. Gaussian Splatting, with its explicit, real-time, differentiable rasterization of anisotropic primitives, offers an ideal renderer onto which event-based supervision can be grafted. This survey provides a comprehensive review of the rapidly growing literature on \emph{Event-based Gaussian Splatting} (Event-GS), spanning 2023--2026, with particular emphasis on recent CVPR, ICCV, ECCV, NeurIPS, and ICML work. We organize $24+$ methods into six taxonomic categories---static novel-view synthesis, motion deblurring, low-light/HDR reconstruction, dynamic/4D reconstruction, SLAM/tracking, and dataset/simulation---and analyze the core technical contribution, event-generation model, deformation strategy, and supervision formulation of each. We further extract cross-cutting technical dimensions (event-to-image vs.\ event-to-flow supervision, continuous trajectory parameterization, deformation fields, physical priors) and identify open problems including occlusion handling, static-prior bootstrapping, per-event point-process losses, and differentiable event-camera physics. This survey aims to serve as a reference for researchers entering the field and as a roadmap for future work.
+\end{abstract}
+
+\begin{IEEEkeywords}
+event cameras, Gaussian Splatting, novel view synthesis, dynamic scene reconstruction, deblurring, neuromorphic vision, 4D reconstruction, survey
+\end{IEEEkeywords}
+
+%==================================================================
+\input{sections/01_introduction}
+\input{sections/02_background}
+\input{sections/03_taxonomy}
+\input{sections/04_static_nvs}
+\input{sections/05_deblurring}
+\input{sections/06_lowlight_hdr}
+\input{sections/07_dynamic_4d}
+\input{sections/08_slam_tracking}
+\input{sections/09_datasets_simulation}
+\input{sections/10_crosscutting}
+\input{sections/11_discussion}
+\input{sections/12_conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

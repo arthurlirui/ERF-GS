@@ -1,0 +1,222 @@
+% ============================================================
+% References for Event Cameras Meet Gaussian Splatting: A Survey
+% ============================================================
+
+% ---------- Foundational ----------
+@inproceedings{kerbl2023gaussian,
+  title={3D Gaussian Splatting for Real-Time Radiance Field Rendering},
+  author={Kerbl, Bernhard and Kopanas, Georgios and Leimk{\"u}hler, Thomas and Drettakis, George},
+  booktitle={ACM Transactions on Graphics (SIGGRAPH)},
+  volume={42}, number={4}, pages={139:1--139:14}, year={2023}
+}
+@article{mildenhall2021nerf,
+  title={{NeRF}: Representing Scenes as Neural Radiance Fields for View Synthesis},
+  author={Mildenhall, Ben and Srinivasan, Pratul P. and Tancik, Matthew and Barron, Jonathan T. and Ramamoorthi, Ravi and Ng, Ren},
+  journal={Communications of the ACM}, volume={65}, number={1}, pages={99--106}, year={2021}
+}
+@article{gallego2020event,
+  title={Event-Based Vision: A Survey},
+  author={Gallego, Guillermo and Delbr{\"u}ck, Tobi and Orchard, Garrick and Bartolozzi, Chiara and Taba, Brian and Censi, Andrea and Leutenegger, Stefan and Davison, Andrew J. and Conradt, J{\"o}rg and Daniilidis, Kostas and others},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, volume={44}, number={1}, pages={154--180}, year={2020}
+}
+@inproceedings{pan2019edi,
+  title={Bringing a Blurry Frame Alive at High Frame-Rate with an Event Camera},
+  author={Pan, Liyuan and Scheerlinck, Cedric and Yu, Xin and Hartley, Richard and Liu, Miaomiao and Dai, Yuchao},
+  booktitle={CVPR}, year={2019}
+}
+@inproceedings{cao2023hexplane,
+  title={{HexPlane}: A Fast Representation for Dynamic Scenes},
+  author={Cao, Ang and Johnson, Justin},
+  booktitle={CVPR}, year={2023}
+}
+
+% ---------- 4DGS backbones ----------
+@inproceedings{wu2024ldgswu,
+  title={4D Gaussian Splatting for Real-Time Dynamic Scene Rendering},
+  author={Wu, Guanjun and Yi, Taoran and Fang, Jiemin and Xie, Lingxi and Zhang, Xiaopeng and Wei, Wei and Liu, Wenyu and Tian, Qi and Wang, Xinggang},
+  booktitle={CVPR}, year={2024}
+}
+@inproceedings{yang2024realtime,
+  title={Real-time Photorealistic Dynamic Scene Representation and Rendering with 4D Gaussian Splatting},
+  author={Yang, Zeyu and Yang, Hongye and Pan, Zijie and Zhu, Xiatian and Zhang, Li},
+  booktitle={ICLR}, year={2024}
+}
+@inproceedings{bae2024pergaussian,
+  title={Per-Gaussian Embedding-Based Deformation for Deformable 3D Gaussian Splatting},
+  author={Bae, Jeongmin and Kim, Seoha and Yun, Youngsik and Lee, Hahyun and Bang, Gun and Uh, Youngjung},
+  booktitle={ECCV}, year={2024}
+}
+
+% ---------- Event-NeRF background ----------
+@inproceedings{rudnev2023eventnerf,
+  title={{EventNeRF}: Neural Radiance Fields from a Single Colour Event Camera},
+  author={Rudnev, Viktor and Elgharib, Mohamed and Theobalt, Christian and Golyanik, Vladislav},
+  booktitle={CVPR}, year={2023}
+}
+@article{klenk2023enerf,
+  title={{E-NeRF}: Neural Radiance Fields from a Moving Event Camera},
+  author={Klenk, Simon and Koestler, Lukas and Scaramuzza, Davide and Cremers, Daniel},
+  journal={IEEE Robotics and Automation Letters}, volume={8}, number={3}, pages={1587--1594}, year={2023}
+}
+@inproceedings{hwang2023evnerf,
+  title={{Ev-NeRF}: Event Based Neural Radiance Field},
+  author={Hwang, Inwoo and Kim, Junho and Kim, Young Min},
+  booktitle={WACV}, year={2023}
+}
+
+% ---------- A. Static NVS ----------
+@inproceedings{han2024event3dgs,
+  title={{Event-3DGS}: Event-Based 3D Reconstruction Using 3D Gaussian Splatting},
+  author={Han, Haiqian and Li, Jianing and Wei, Henglu and Ji, Xiangyang},
+  booktitle={NeurIPS}, year={2024}
+}
+@inproceedings{wang2024evggs,
+  title={{EvGGS}: A Collaborative Learning Framework for Event-Based Generalizable Gaussian Splatting},
+  author={Wang, Jia-Xu and He, Jun-Hao and Zhang, Ziyi and Sun, Mingyuan and Sun, Jing-Kai and Xu, Ren-Jing},
+  booktitle={ICML}, year={2024}
+}
+@inproceedings{wu2024evgs,
+  title={{EV-GS}: Event-Based Gaussian Splatting for Efficient and Accurate Radiance Field Rendering},
+  author={Wu, Jingqian and Zhu, Shu and Wang, Chutian and Lam, Edmund Y.},
+  booktitle={IEEE International Workshop on Machine Learning for Signal Processing (MLSP)}, year={2024}
+}
+@inproceedings{yura2025eventsplat,
+  title={{EventSplat}: 3D Gaussian Splatting from Moving Event Cameras for Real-time Rendering},
+  author={Yura, Toshiya and Mirzaei, Ashkan and Gilitschenski, Igor},
+  booktitle={CVPR}, year={2025}
+}
+@inproceedings{huang2025inceventgs,
+  title={{IncEventGS}: Pose-Free Gaussian Splatting from a Single Event Camera},
+  author={Huang, Jian and Dong, Chengrui and Chen, Xuan-Hua and Liu, Pei-Dong},
+  booktitle={CVPR}, year={2025}
+}
+@inproceedings{liao2025ef3dgs,
+  title={{EF-3DGS}: Event-Aided Free-Trajectory 3D Gaussian Splatting},
+  author={Liao, Bohao and Zhai, Wei and Wan, Zengyu and Cheng, Zhixin and Yang, Wenfei and Cao, Yang and Zhang, Tianzhu and Zha, Zheng-Jun},
+  booktitle={NeurIPS}, year={2025}, note={Spotlight}
+}
+@inproceedings{liu2025gsevt,
+  title={{GS-EVT}: Cross-Modal Event Camera Tracking Based on Gaussian Splatting},
+  author={Liu, Tao and Yuan, Runze and Ju, Yi'ang and Xu, Xun and Yang, Jiaqi and Meng, Xiangting and Lagorce, Xavier and Kneip, Laurent},
+  booktitle={ICRA}, year={2025}
+}
+@article{chen2026evtrajgs,
+  title={{EvTrajGS}: Accurate and Efficient 3D Gaussian Splatting from Unposed Event Streams},
+  author={Chen, Zixuan and Zhang, Jiakai and Dong, Junhao and Wang, Guangcong and Lai, Jianhuang and Ong, Yew-Soon and Xie, Xiaohua},
+  journal={arXiv preprint arXiv:2608.08585}, year={2026}
+}
+@article{kim2026e2egs,
+  title={{E2EGS}: Event-to-Edge Gaussian Splatting for Pose-Free 3D Reconstruction},
+  author={Kim, Yunsoo and Sung, Chan-Yong and Hong, Dasol and Myung, Hyun},
+  journal={arXiv preprint}, year={2026}
+}
+
+% ---------- B. Deblurring ----------
+@inproceedings{deguchi2024e2gs,
+  title={{E2GS}: Event Enhanced Gaussian Splatting},
+  author={Deguchi, Hiroyuki and Masuda, Mana and Nakabayashi, Takuya and Saito, Hideo},
+  booktitle={ICIP}, year={2024}
+}
+@inproceedings{huang2024ev3dgs,
+  title={{Ev3DGS}: Event Enhanced 3D Gaussian Splatting from Blurry Images},
+  author={Huang, Junwu and Wan, Zhexiong and Lu, Zhicheng and Zhu, Juanjuan and He, Mingyi and Dai, Yuchao},
+  booktitle={APSIPA ASC}, year={2024}
+}
+@article{weng2024eadeblur,
+  title={{EaDeblur-GS}: Event Assisted 3D Deblur Reconstruction with Gaussian Splatting},
+  author={Weng, Yuchen and Shen, Zhengwen and Chen, Ruofan and Wang, Qi and Wang, Jun},
+  journal={arXiv preprint}, year={2024}
+}
+@inproceedings{zhao2024badgaussians,
+  title={{BAD-Gaussians}: Bundle Adjusted Deblur Gaussian Splatting},
+  author={Zhao, Lingzhe and Wang, Peng and Liu, Peidong},
+  booktitle={ECCV}, year={2024}
+}
+@inproceedings{yu2025evagaussians,
+  title={{EvaGaussians}: Event Stream Assisted Gaussian Splatting from Blurry Images},
+  author={Yu, Wangbo and Feng, Chaoran and Li, Jianing and Tang, Jiye and Yang, Jiashu and Tang, Zhenyu and Cao, Meng and Jia, Xu and Yang, Yuchao and Yuan, Li and Tian, Yonghong},
+  booktitle={ICCV}, pages={24780--24790}, year={2025}
+}
+@inproceedings{lee2025dietgs,
+  title={{DiET-GS}: Diffusion Prior and Event Stream-Assisted Motion Deblurring 3D Gaussian Splatting},
+  author={Lee, Seungjun and Lee, Gim Hee},
+  booktitle={CVPR}, year={2025}
+}
+@article{deng2025ebad,
+  title={{EBAD-Gaussian}: Event-Driven Bundle Adjusted Deblur Gaussian Splatting},
+  author={Deng, Yufei and Wang, Yuanjian and Xiao, Rong and Tang, Chenwei and Zhou, Jizhe and Fan, Jiahao and Xiong, Deng and Lv, Jiancheng and Tang, Huajin},
+  journal={arXiv preprint}, year={2025}
+}
+@inproceedings{an2026evflow,
+  title={{EvFlow-GS}: Event Enhanced Motion Deblurring with Optical Flow for 3D Gaussian Splatting},
+  author={An, Feiyu and Deng, Yufei and Zhang, Zihui and Xiao, Rong},
+  booktitle={ICME}, year={2026}
+}
+@article{li2025deblursplat,
+  title={{DeblurSplat}: SfM-free 3D Gaussian Splatting with Event Camera for Robust Deblurring},
+  author={Li, Pengteng and Lu, Yunfan and others and Xiong, Hui},
+  journal={arXiv preprint}, year={2025}
+}
+@article{fu2026jadegs,
+  title={{JADE-GS}: Joint Allocation of Deblurring Evidence for Event-Assisted 3D Gaussian Splatting},
+  author={Fu, Hao-Yu and Huang, Jia-Feng and Zhao, Sheng-Jie},
+  journal={arXiv preprint arXiv:2607.14990}, year={2026}
+}
+@article{lin2025e2dgs,
+  title={{E2D-GS}: Event-Enhanced Deblurring Gaussian Splatting},
+  author={Lin, Lifeng and Yuan, Shuangjie and Yang, Lu},
+  journal={Expert Systems with Applications}, volume={298}, year={2025}
+}
+@article{dai2026asyncevgs,
+  title={{AsyncEvGS}: Asynchronous Event-Assisted Gaussian Splatting for Handheld Motion-Blurred Scenes},
+  author={Dai, Jun and Jin, Renbiao and others and Guo, Shixian},
+  journal={arXiv preprint}, year={2026}
+}
+
+% ---------- C. Low-light / HDR ----------
+@article{wu2025darkevgs,
+  title={{Dark-EvGS}: Event Camera as an Eye for Radiance Field in the Dark},
+  author={Wu, Jingqian and Duan, Peiqi and Wang, Zongqiang and Wang, Changwei and Shi, Boxin and Lam, Edmund Y.},
+  journal={arXiv preprint arXiv:2507.11931}, year={2025}
+}
+@inproceedings{chen2026evhdrgs,
+  title={{EvHDR-GS}: Event-Guided HDR Video Reconstruction with 3D Gaussian Splatting},
+  author={Chen, Zehao and Lu, Zhan and Ma, De and Tang, Huajin and Jiang, Xudong and Zheng, Qian and Pan, Gang},
+  booktitle={AAAI}, year={2026}
+}
+
+% ---------- D. Dynamic / 4D ----------
+@inproceedings{xu2025eventboosted,
+  title={Event-Boosted Deformable 3D Gaussians for Dynamic Scene Reconstruction},
+  author={Xu, Wenhao and Weng, Wenming and Zhang, Yueyi and Xu, Ruikang and Xiong, Zhiwei},
+  booktitle={ICCV}, year={2025}
+}
+@inproceedings{dai2026fasteventdgs,
+  title={{FastEventDGS}: Deformable Gaussian Splatting for Fast Dynamic Scenes from a Single Event Camera},
+  author={Dai, Zijia and Messikommer, Nico and Zou, Rong and Zubic, Nikola and Scaramuzza, Davide and Kneip, Laurent},
+  booktitle={CVPR}, year={2026}
+}
+@article{bai2026erfgs,
+  title={{ERF-GS}: Reconstructing Fast Motion from Disjoint Event-RGB Viewpoints},
+  author={Bai, Xiaoyang and Li, Zhenyang and Xu, Weiwei and Lam, Edmund Y. and Peng, Yifan},
+  journal={Computational Visual Media (CVMJ)}, year={2026}, note={in production}
+}
+@article{xu2025pegs,
+  title={{PEGS}: Physics-Event Enhanced Large Spatiotemporal Motion Reconstruction via 3D Gaussian Splatting},
+  author={Xu, Yijun and Zhang, Jingrui and Liu, Hongyi and Chen, Yuhan and Wang, Yuanyang and Guo, Qingyao and Wang, Dingwen and Yu, Lei and He, Chu},
+  journal={arXiv preprint arXiv:2511.17116}, year={2025}
+}
+
+% ---------- E. SLAM / Tracking ----------
+@article{hu2026motiongs,
+  title={{MotionGS-SLAM}: Event-Modulated Gaussian Splatting for Motion-Blur Robust SLAM},
+  author={Hu, Zhiqiang and Huang, Shouren and Ishikawa, Masatoshi},
+  journal={arXiv preprint arXiv:2608.15024}, year={2026}
+}
+
+% ---------- F. Datasets / Simulation ----------
+@inproceedings{li2025gs2e,
+  title={{GS2E}: Gaussian Splatting is an Effective Data Generator for Event Stream Generation},
+  author={Li, Yuchen and Feng, Chaoran and Tang, Zhenyu and Deng, Kaiyuan and Yu, Wangbo and Tian, Yonghong and Yuan, Li},
+  booktitle={NeurIPS}, year={2025}
+}

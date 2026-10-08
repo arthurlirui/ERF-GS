@@ -1,0 +1,16 @@
+\section{SLAM and Tracking}
+\label{sec:slam}
+
+Event-driven SLAM and tracking with Gaussian-Splatting maps is a smaller but growing category, sitting between the static-NVS and dynamic-4D lines.
+
+\subsection{GS-EVT (ICRA 2025)}
+\label{sec:slam:gsevt}
+
+As discussed in \S\ref{sec:static:gsevt}, GS-EVT~\cite{liu2025gsevt} builds a 3DGS map from RGB frames and tracks an event camera against it, exploiting the complementary strengths of the two modalities: RGB for dense mapping, events for robust high-speed tracking.
+
+\subsection{MotionGS-SLAM (arXiv 2026)}
+\label{sec:slam:motiongs}
+
+MotionGS-SLAM~\cite{hu2026motiongs} takes a conceptually distinctive approach: rather than treating motion blur as an inverse deblurring problem, it models blur \emph{forward} inside the renderer. Events modulate the Gaussian kernels in two ways: (i) \emph{spatial modulation} transforms isotropic points into anisotropic ellipses aligned with the motion direction, mimicking the blur trail; (ii) \emph{temporal modulation} adjusts exposure-integration sampling density by local velocity. A 4D spatiotemporal hash grid associates events with Gaussians. This yields a motion-blur-robust SLAM system that renders blur as a first-class phenomenon.
+
+\textbf{Core point:} rather than remove blur, model it---events provide the per-pixel motion direction and magnitude that parameterize the blur kernel. This inverts the deblurring category's premise and connects SLAM to the forward-blur-modeling strand of EvFlow-GS and EBAD-Gaussian.

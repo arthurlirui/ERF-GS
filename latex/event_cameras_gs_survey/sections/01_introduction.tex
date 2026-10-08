@@ -1,0 +1,18 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Novel-view synthesis (NVS) and 3D/4D scene reconstruction have been transformed by two complementary technologies. On the representation side, 3D Gaussian Splatting (3DGS)~\cite{kerbl2023gaussian} replaced the implicit neural radiance fields of NeRF~\cite{mildenhall2021nerf} with an explicit set of anisotropic Gaussian primitives that can be rasterized in real time and optimized via differentiable rendering. On the sensing side, event cameras~\cite{gallego2020event}---bio-inspired sensors that asynchronously emit per-pixel log-luminance change events---provide microsecond temporal resolution, high dynamic range (HDR), and near-immunity to motion blur, precisely the capabilities that conventional frame cameras lack.
+
+The combination is natural. RGB frames supply dense absolute appearance but blur and alias under fast motion; events supply sparse, relative, high-temporal-resolution motion cues but no absolute color. Recent work has demonstrated that fusing the two modalities through the Gaussian Splatting renderer yields reconstructions that neither modality can achieve alone: sharp novel views from motion-blurred inputs~\cite{yu2025evagaussians,lee2025dietgs}, HDR radiance fields in the dark~\cite{wu2025darkevgs,chen2026evhdrgs}, and dynamic 4D Gaussians for fast-moving scenes~\cite{dai2026fasteventdgs,bai2026erfgs,xu2025eventboosted}.
+
+The pace of progress has been remarkable. The first event-based Gaussian Splatting methods appeared in 2024~\cite{han2024event3dgs,deguchi2024e2gs,wang2024evggs}; by 2025--2026 the subfield spans dedicated tracks at CVPR, ICCV, ECCV, NeurIPS, and ICML, with methods targeting deblurring (EvaGaussians~\cite{yu2025evagaussians}, DiET-GS~\cite{lee2025dietgs}), free-trajectory reconstruction (EF-3DGS~\cite{liao2025ef3dgs}, EvTrajGS~\cite{chen2026evtrajgs}), fast dynamic 4D (FastEventDGS~\cite{dai2026fasteventdgs}, ERF-GS~\cite{bai2026erfgs}, Event-Boosted~\cite{xu2025eventboosted}), and SLAM/tracking (GS-EVT~\cite{liu2025gsevt}, MotionGS-SLAM~\cite{hu2026motiongs}). The diversity of formulations---event double integral priors, contrast maximization, linear-flow losses, continuous B-spline trajectories, event-driven densification---makes a consolidated survey timely.
+
+\textbf{Scope and contributions.} This survey reviews the literature on event-camera-driven Gaussian Splatting through mid-2026. Our contributions are:
+\begin{itemize}
+    \item A six-category taxonomy (\S\ref{sec:taxonomy}) organizing $24+$ methods by the sub-problem they solve.
+    \item Per-paper analysis (\S\ref{sec:static}--\S\ref{sec:datasets}) of the core technical contribution, event-generation model, and supervision form of each method, with emphasis on CVPR/ICCV/ECCV work.
+    \item A cross-cutting technical synthesis (\S\ref{sec:crosscutting}) extracting the recurring design choices (event-to-image vs.\ event-to-flow, trajectory parameterization, deformation fields, physical priors).
+    \item An open-problems discussion (\S\ref{sec:discussion}) identifying occlusion handling, static-prior bootstrapping, per-event point-process losses, and differentiable event-camera physics as the most promising future directions.
+\end{itemize}
+
+We deliberately complement event-camera-only NeRF works (EventNeRF~\cite{rudnev2023eventnerf}, E-NeRF~\cite{klenk2023enerf}, Ev-NeRF~\cite{hwang2023evnerf}) only as background, and focus the bulk of the survey on the Gaussian-Splatting family, which now dominates the field in rendering speed and reconstruction fidelity.

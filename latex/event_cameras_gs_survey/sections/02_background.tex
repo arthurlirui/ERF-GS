@@ -1,0 +1,42 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{Event Cameras}
+\label{sec:bg:event}
+
+An event camera (Dynamic Vision Sensor, DVS) emits an event $e_k=(x_k,y_k,t_k,p_k)$ whenever the log-luminance $L$ at pixel $(x_k,y_k)$ changes by a contrast threshold $C$:
+\begin{equation}
+    L(x,y,t_k) - L(x,y,t_k-\Delta t) = p_k\, C, \quad p_k\in\{-1,+1\}.
+    \label{eq:event}
+\end{equation}
+Events are sparse, asynchronous, and carry only relative brightness. Their strengths---microsecond temporal resolution ($\sim\!\mu$s), HDR ($>120$\,dB), no motion blur---are dual to their weaknesses: no absolute intensity, noisy in low-contrast regions, and difficult to aggregate into a dense representation. The contrast threshold $C$ is in practice pixel-, time-, and scene-dependent, a non-ideality that motivates the differentiable simulator line of work discussed in \S\ref{sec:discussion}.
+
+\textbf{Event generation model.} The canonical mapping from a pair of images $I_1,I_2$ to a predicted event stream is the \emph{linlog} model:
+\begin{equation}
+    \hat{e} = \frac{\mathrm{linlog}(\mathrm{luma}(I_2)) - \mathrm{linlog}(\mathrm{luma}(I_1))}{C},
+    \label{eq:linlog}
+\end{equation}
+where $\mathrm{luma}=0.299R+0.587G+0.114B$ and $\mathrm{linlog}$ is linear below a threshold and logarithmic above, mimicking the sensor response~\cite{bai2026erfgs}. Aggregated forms include the event voxel (positive/negative polarity counts binned into $T$ time slices) and the event double integral (EDI)~\cite{pan2019edi}, which relates a blurry image to a sequence of sharp images via integration of the event stream.
+
+\subsection{Gaussian Splatting}
+\label{sec:bg:gs}
+
+3DGS~\cite{kerbl2023gaussian} represents a scene as a set of anisotropic Gaussians $\{\mu_i,\Sigma_i,\alpha_i,c_i\}$ (mean, covariance, opacity, color via spherical harmonics). Rendering is an $\alpha$-blended differentiable rasterization:
+\begin{equation}
+    C(\mathbf{u}) = \sum_{i\in\mathcal{N}} c_i\,\alpha_i\,T_i, \quad T_i=\prod_{j<i}(1-\alpha_j),
+    \label{eq:splat}
+\end{equation}
+where $\alpha_i=o_i\cdot\exp(-\tfrac12(\mathbf{u}-\mu_i')^\top\Sigma_i^{-1}(\mathbf{u}-\mu_i'))$ after projecting the 3D Gaussian to the screen. Optimization adapts the per-Gaussian parameters via gradient-driven densification (clone/split), pruning, and opacity reset.
+
+\textbf{Deformable / 4D GS.} Dynamic extensions add a deformation field $D(\mathbf{x},t)$ that predicts per-Gaussian deltas $\Delta\mu,\Delta\Sigma,\Delta\alpha,\Delta c$ at query time $t$. Representative backbones include deformation MLPs conditioned on HexPlane~\cite{cao2023hexplane} grid features (4DGS~\cite{wu2024ldgswu}), per-Gaussian embeddings~\cite{bae2024pergaussian}, and 4D Gaussian primitives~\cite{yang2024realtime}. These backbones are the substrate onto which event-camera supervision is grafted in the dynamic-reconstruction methods of \S\ref{sec:dynamic}.
+
+\subsection{Why Events + GS?}
+\label{sec:bg:why}
+
+The pairing is synergistic along three axes:
+\begin{itemize}
+    \item \emph{Speed:} 3DGS renders in real time ($>100$\,FPS), enabling the many-frame event-supervision loops that NeRF could not afford.
+    \item \emph{Differentiability:} The differentiable rasterizer lets event losses backpropagate into Gaussian geometry and appearance directly, without the surrogate losses required by NeRF.
+    \item \emph{Explicit densification:} 3DGS's clone/split machinery offers a natural insertion point for \emph{event-driven} densification---back-projecting event pixels to spawn new primitives---which has no analog in implicit representations.
+\end{itemize}
+These three properties jointly explain why the Event-GS literature has grown from a single 2024 method to a multi-track subfield in under three years.

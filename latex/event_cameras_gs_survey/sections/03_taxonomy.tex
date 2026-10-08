@@ -1,0 +1,69 @@
+\section{Taxonomy}
+\label{sec:taxonomy}
+
+We organize the Event-GS literature into six categories by the sub-problem addressed. A method may appear in more than one category; we place each in its primary category and cross-reference.
+
+\begin{enumerate}
+    \item[\textbf{A.}] \textbf{Static novel-view synthesis} (\S\ref{sec:static}): event-only or event-RGB reconstruction of static scenes, often with fast camera motion or unknown pose. Key works: EventSplat~\cite{yura2025eventsplat}, Event-3DGS~\cite{han2024event3dgs}, EvGGS~\cite{wang2024evggs}, EV-GS~\cite{wu2024evgs}, EF-3DGS~\cite{liao2025ef3dgs}, EvTrajGS~\cite{chen2026evtrajgs}, IncEventGS~\cite{huang2025inceventgs}, E2EGS~\cite{kim2026e2egs}, GS-EVT~\cite{liu2025gsevt}.
+    \item[\textbf{B.}] \textbf{Motion deblurring} (\S\ref{sec:deblurring}): recovering sharp 3DGS from motion-blurred RGB frames aided by events. Key works: E2GS~\cite{deguchi2024e2gs}, EvaGaussians~\cite{yu2025evagaussians}, DiET-GS~\cite{lee2025dietgs}, EBAD-Gaussian~\cite{deng2025ebad}, EvFlow-GS~\cite{an2026evflow}, JADE-GS~\cite{fu2026jadegs}, E2D-GS~\cite{lin2025e2dgs}, EaDeblur-GS~\cite{weng2024eadeblur}, Ev3DGS~\cite{huang2024ev3dgs}, DeblurSplat~\cite{li2025deblursplat}, AsyncEvGS~\cite{dai2026asyncevgs}, BAD-Gaussians~\cite{zhao2024badgaussians}.
+    \item[\textbf{C.}] \textbf{Low-light / HDR} (\S\ref{sec:lowlight}): reconstructing radiance fields under extreme illumination. Key works: Dark-EvGS~\cite{wu2025darkevgs}, EvHDR-GS~\cite{chen2026evhdrgs}.
+    \item[\textbf{D.}] \textbf{Dynamic / 4D reconstruction} (\S\ref{sec:dynamic}): deformable Gaussians for fast-moving scenes. Key works: FastEventDGS~\cite{dai2026fasteventdgs}, ERF-GS~\cite{bai2026erfgs}, Event-Boosted~\cite{xu2025eventboosted}, PEGS~\cite{xu2025pegs}.
+    \item[\textbf{E.}] \textbf{SLAM / tracking} (\S\ref{sec:slam}): event-driven localization and mapping with GS maps. Key works: MotionGS-SLAM~\cite{hu2026motiongs}, GS-EVT~\cite{liu2025gsevt}.
+    \item[\textbf{F.}] \textbf{Datasets / simulation} (\S\ref{sec:datasets}): using GS to generate event data, or benchmark datasets. Key works: GS2E~\cite{li2025gs2e}.
+\end{enumerate}
+
+Table~\ref{tab:summary} summarizes the methods, venues, input modalities, and key innovations.
+
+\begin{table*}[t]
+\centering
+\caption{Summary of Event-based Gaussian Splatting methods (2023--2026). ``In'' = input modality (E=events, R=RGB, B=blurry RGB, D=depth). ``Pose'' = whether known poses are required (\checkmark) or estimated (Pose-Free).}
+\label{tab:summary}
+\renewcommand{\arraystretch}{1.15}
+\small
+\begin{tabular}{@{}p{0.5cm}p{3.4cm}p{1.2cm}p{0.7cm}p{0.7cm}p{8.5cm}@{}}
+\toprule
+\# & Method & Venue & In & Pose & Core innovation \\
+\midrule
+\multicolumn{6}{l}{\textbf{A. Static novel-view synthesis}} \\
+A1 & Event-3DGS~\cite{han2024event3dgs} & NeurIPS'24 & E & \checkmark & First event-only 3DGS; view-volume loss for stability. \\
+A2 & EvGGS~\cite{wang2024evggs} & ICML'24 & E & \checkmark & First generalizable feed-forward event-GS; collaborative learning. \\
+A3 & EV-GS~\cite{wu2024evgs} & MVA'24 & E & \checkmark & CNI-informed monocular event-GS. \\
+A4 & EventSplat~\cite{yura2025eventsplat} & CVPR'25 & E & \checkmark & E2VID init + spline-interpolated poses; real-time. \\
+A5 & IncEventGS~\cite{huang2025inceventgs} & CVPR'25 & E & Free & Incremental pose-free event-GS; SLAM-style tracking+mapping. \\
+A6 & EF-3DGS~\cite{liao2025ef3dgs} & NeurIPS'25 & E,R & Free & Free-trajectory; CMax pose calibration + photometric BA. \\
+A7 & GS-EVT~\cite{liu2025gsevt} & ICRA'25 & E,R & \checkmark & Cross-modal: RGB-built GS map, event-camera tracking. \\
+A8 & EvTrajGS~\cite{chen2026evtrajgs} & arXiv'26 & E & Free & Continuous-time trajectory + temporally-coupled pose; 7$\times$ faster than IncEventGS. \\
+A9 & E2EGS~\cite{kim2026e2egs} & arXiv'26 & E & Free & Event-to-edge pose-free reconstruction. \\
+\midrule
+\multicolumn{6}{l}{\textbf{B. Motion deblurring}} \\
+B1 & E2GS~\cite{deguchi2024e2gs} & ICIP'24 & B,E & \checkmark & First event+GS; EDI bins; 140 FPS, 60$\times$ faster than E$^2$NeRF. \\
+B2 & Ev3DGS~\cite{huang2024ev3dgs} & APSIPA'24 & B,E & \checkmark & Event+RGB 3DGS deblurring. \\
+B3 & EaDeblur-GS~\cite{weng2024eadeblur} & arXiv'24 & B,E & \checkmark & Event-assisted real-time deblur 3DGS. \\
+B4 & BAD-Gaussians~\cite{zhao2024badgaussians} & ECCV'24 & B & \checkmark & Bundle-adjusted deblur GS (no events; baseline). \\
+B5 & EvaGaussians~\cite{yu2025evagaussians} & ICCV'25 & B,E & \checkmark & Event streams into init+optimization; two new datasets. \\
+B6 & DiET-GS~\cite{lee2025dietgs} & CVPR'25 & B,E & \checkmark & EDI + diffusion prior (RSD); two-stage deblurring. \\
+B7 & EBAD-Gaussian~\cite{deng2025ebad} & arXiv'25 & B,E & Est. & Event-driven bundle-adjusted deblur; EDI prior. \\
+B8 & EvFlow-GS~\cite{an2026evflow} & ICME'26 & B,E & Est. & Learnable double integral + optical flow; B\'ezier SE(3) trajectory; critiques linlog. \\
+B9 & DeblurSplat~\cite{li2025deblursplat} & arXiv'25 & B,E & Free & First SfM-free deblur event-GS. \\
+B10 & JADE-GS~\cite{fu2026jadegs} & arXiv'26 & B,E & \checkmark & Spatial prior router fuses analytic+learned deblur evidence. \\
+B11 & E2D-GS~\cite{lin2025e2dgs} & ESWA'25 & B,E & \checkmark & Event-driven blur formation + differential consistency. \\
+B12 & AsyncEvGS~\cite{dai2026asyncevgs} & arXiv'26 & B,E & \checkmark & Asynchronous RGB-Event dual-camera system + dataset. \\
+\midrule
+\multicolumn{6}{l}{\textbf{C. Low-light / HDR}} \\
+C1 & Dark-EvGS~\cite{wu2025darkevgs} & arXiv'25 & B,E & \checkmark & Triplet supervision + color tone matching; first dark-event-radiance dataset. \\
+C2 & EvHDR-GS~\cite{chen2026evhdrgs} & AAAI'26 & E,R & \checkmark & HDR 3DGS; learnable HDR-to-LDR via events. \\
+\midrule
+\multicolumn{6}{l}{\textbf{D. Dynamic / 4D reconstruction}} \\
+D1 & Event-Boosted~\cite{xu2025eventboosted} & ICCV'25 & E,R & \checkmark & GS-Threshold joint modeling + dynamic-static decomposition. \\
+D2 & FastEventDGS~\cite{dai2026fasteventdgs} & CVPR'26 & E & \checkmark & First single-event-camera deformable 4DGS; B-spline + dual event model + VGGT depth. \\
+D3 & ERF-GS~\cite{bai2026erfgs} & CVMJ'26 & E,R & \checkmark & Disjoint event-RGB viewpoints; linlog+STE loss; event-driven densification. \\
+D4 & PEGS~\cite{xu2025pegs} & arXiv'25 & E,R & \checkmark & Physics prior (acceleration consistency) + Kalman; large-scale rigid motion. \\
+\midrule
+\multicolumn{6}{l}{\textbf{E. SLAM / tracking}} \\
+E1 & MotionGS-SLAM~\cite{hu2026motiongs} & arXiv'26 & E,R & Free & Forward blur modeling; event-modulated anisotropic kernels; 4D hash grid. \\
+\midrule
+\multicolumn{6}{l}{\textbf{F. Datasets / simulation}} \\
+F1 & GS2E~\cite{li2025gs2e} & NeurIPS'25 & R & \checkmark & GS$\to$events simulator; 1150+ scenes; adaptive threshold. \\
+\bottomrule
+\end{tabular}
+\end{table*}
